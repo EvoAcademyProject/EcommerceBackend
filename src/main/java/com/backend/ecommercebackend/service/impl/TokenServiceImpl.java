@@ -10,9 +10,9 @@ import java.util.Date;
 
 @Service
 public class TokenServiceImpl implements TokenService {
-    private static final long ACCESS_TOKEN_VALIDITY = 15 * 60 * 1000; // 15 minutes
-    private static final long REFRESH_TOKEN_VALIDITY = 30 * 24 * 60 * 60 * 1000; // 30 days
-    private static final String SECRET_KEY = "your_secret_key"; // Replace with your secret key
+    private static final long ACCESS_TOKEN_VALIDITY = 15 * 60 * 1000;
+    private static final long REFRESH_TOKEN_VALIDITY = 30 * 24 * 60 * 60 * 1000;
+    private static final String SECRET_KEY = "Gz7#fD3!qR9@un2*Hj4$wLk8&vXz5#Yp";
 
     @Override
     public String generateAccessToken(String username) {
