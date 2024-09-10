@@ -1,5 +1,6 @@
 package com.backend.ecommercebackend.authentication.jwt;
 
+import com.backend.ecommercebackend.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

@@ -1,7 +1,9 @@
 package com.backend.ecommercebackend.controller;
 
+import com.backend.ecommercebackend.dto.UsersDto;
 import com.backend.ecommercebackend.model.User;
 import com.backend.ecommercebackend.repository.UserRepository;
+import com.backend.ecommercebackend.service.impl.UsersServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
