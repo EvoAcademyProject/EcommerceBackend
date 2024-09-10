@@ -33,6 +33,7 @@ public class Users {
     @Column(nullable = false)
     Integer age;
 
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
