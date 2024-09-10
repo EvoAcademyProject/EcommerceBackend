@@ -35,7 +35,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
          http
-//               .csrf((csrf)->csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                   .csrf(AbstractHttpConfigurer::disable)
                  .exceptionHandling(exception ->
                          exception.accessDeniedHandler(accessDeniedHandler)
@@ -44,7 +43,6 @@ public class SecurityConfig {
                    .authorizeHttpRequests( auth ->
                     auth
                             .requestMatchers("/api/v1/auth/**").permitAll()
-//                            .requestMatchers("/api/v1/user/**").permitAll()
                             .anyRequest().authenticated()
                 )
 
