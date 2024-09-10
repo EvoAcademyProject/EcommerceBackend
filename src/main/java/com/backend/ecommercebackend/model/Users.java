@@ -32,6 +32,7 @@ public class Users {
     String password;
     @Column(nullable = false)
     Integer age;
+    //salam
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
