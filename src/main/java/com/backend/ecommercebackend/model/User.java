@@ -16,22 +16,21 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "users")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Users {
+@Builder
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @Column(nullable = false)
-    String name;
+    String firstName;
     @Column(nullable = false)
-    String surname;
+    String lastName;
     @Column(nullable = false, unique = true)
     String email;
-    @Column(nullable = false, unique = true)
-    String username;
     @Column(nullable = false)
     String password;
-    @Column(nullable = false)
-    Integer age;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -39,7 +38,7 @@ public class Users {
     LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false, updatable = false)
+    @Column(name = "updated_at", nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     LocalDateTime updatedAt;
 }
