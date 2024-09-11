@@ -1,6 +1,7 @@
 package com.backend.ecommercebackend.authentication.controller;
 
 import com.backend.ecommercebackend.authentication.dto.request.AuthRequest;
+import com.backend.ecommercebackend.authentication.dto.request.LogoutRequest;
 import com.backend.ecommercebackend.authentication.model.AuthResponse;
 import com.backend.ecommercebackend.authentication.dto.request.RegisterRequest;
 import com.backend.ecommercebackend.authentication.service.serviceImpl.AuthenticationServiceImpl;
@@ -27,4 +28,9 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.authenticate(request));
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestBody LogoutRequest request) {
+        service.logout(request);
+        return ResponseEntity.ok("Logged out successfully");
+    }
 }
