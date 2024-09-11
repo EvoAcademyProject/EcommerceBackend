@@ -35,10 +35,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserDetailsService userDetailsService;
     @Override
     public AuthResponse register(RegisterRequest request) {
-       User user = authMapper.RegisterDtoToEntity(request,passwordEncoder);
-                user.setRole(Role.USER);
-                user.setCreatedAt(LocalDateTime.now());
-                user.setUpdatedAt(LocalDateTime.now());
+        User user = authMapper.RegisterDtoToEntity(request,passwordEncoder);
+        user.setRole(Role.USER);
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
         repository.save(user);
         String accessToken = jwtService.generateAccessToken(user.getEmail());
         String refreshToken=jwtService.generateRefreshToken(user.getEmail());
@@ -51,10 +51,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthResponse authenticate(AuthRequest request) {
-       authenticationManager.authenticate(
-               new UsernamePasswordAuthenticationToken(
-                       request.getEmail(),
-                       request.getPassword()));
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()));
         User user = repository.findByEmail(request.getEmail()).orElseThrow(()-> new UsernameNotFoundException("user not found"));
         String accessToken = jwtService.generateAccessToken(user.getEmail());
         String refreshToken=jwtService.generateRefreshToken(user.getEmail());
