@@ -11,6 +11,7 @@ import com.backend.ecommercebackend.cache.service.RedisTokenService;
 import com.backend.ecommercebackend.model.Role;
 import com.backend.ecommercebackend.model.User;
 import com.backend.ecommercebackend.repository.UserRepository;
+import com.backend.ecommercebackend.service.impl.EmailServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,6 +38,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthMapper authMapper;
     private final UserDetailsService userDetailsService;
     private final RedisTokenService redisTokenService;
+    private final EmailServiceImpl emailService;
 
     @Override
     public AuthResponse register(RegisterRequest request) {
@@ -45,6 +47,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
         repository.save(user);
+
+        emailService.deleteStoredEmail(request.getEmail());
+
         String accessToken = jwtService.generateAccessToken(user.getEmail());
         String refreshToken=jwtService.generateRefreshToken(user.getEmail());
 
