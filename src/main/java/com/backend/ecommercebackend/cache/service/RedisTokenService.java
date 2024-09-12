@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class RedisTokenService {
 
-  private static final String REFRESH_TOKEN_KEY_PREFIX = "refreshToken: ";
+  private static final String REFRESH_TOKEN_KEY_PREFIX = "refresh_token:";
 
   private final RedisTemplate<String, String> redisTemplate;
 
   public void storeRefreshToken(String email, String refreshToken, long expirationTime) {
-    String redisKey = REFRESH_TOKEN_KEY_PREFIX + email;
+    String redisKey = getRefreshTokenRedisKey(email);
     try {
       redisTemplate.opsForValue().set(redisKey, refreshToken, expirationTime, TimeUnit.MILLISECONDS);
     } catch (Exception e) {
@@ -28,9 +28,6 @@ public class RedisTokenService {
 
     String redisKey = REFRESH_TOKEN_KEY_PREFIX + email;
     var refreshToken = redisTemplate.opsForValue().get(redisKey);
-
-    /*used to use generateRefreshToken, but it might lead unnecessary token regeneration,
-    so I deleted it, but take a look at previous branch commits*/
 
     try {
       if (refreshToken == null) {
@@ -50,6 +47,10 @@ public class RedisTokenService {
   public void deleteRefreshToken(String email) {
     String redisKey = REFRESH_TOKEN_KEY_PREFIX + email;
     redisTemplate.delete(redisKey);
+  }
+
+  private String getRefreshTokenRedisKey(String email) {
+    return REFRESH_TOKEN_KEY_PREFIX + email;
   }
 }
 
