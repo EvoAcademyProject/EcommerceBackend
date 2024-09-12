@@ -31,6 +31,12 @@ public class JwtService {
         return createToken(claims, email,accessTokenExpiration);
     }
 
+    public String generateRefreshToken(String email) {
+        Map<String, Object> claims = new HashMap<>();
+        return createToken(claims, email, refreshTokenExpiration);
+    }
+
+
 
     private String createToken(Map<String, Object> claims, String email, long expiration) {
         return Jwts.builder()
@@ -72,8 +78,13 @@ public class JwtService {
         return (username.equals(user.getUsername()) && !isTokenExpired(token));
     }
 
+
+
+
     private Key getSigninKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
+
 }
