@@ -1,12 +1,11 @@
 package com.backend.ecommercebackend.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Data
 @Builder
 @AllArgsConstructor
+
 public class ChangePasswordRequest {
     private String oldPassword;
     private String newPassword;
