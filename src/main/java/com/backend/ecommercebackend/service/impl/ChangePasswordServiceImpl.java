@@ -5,7 +5,7 @@ import com.backend.ecommercebackend.dto.request.EmailVerifyRequest;
 import com.backend.ecommercebackend.service.ChangePasswordService;
 import com.backend.ecommercebackend.cache.service.RedisVerificationService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ChangePasswordServiceImpl implements ChangePasswordService {
     private final PasswordEncoder passwordEncoder;
     private final RedisVerificationService redisVerificationService;
