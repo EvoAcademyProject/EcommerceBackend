@@ -20,6 +20,6 @@ public class EmailController {
     @PostMapping("/store-email")
     public ResponseEntity<String> storeEmail(@RequestBody EmailRequest request) {
         emailService.storeEmail(request);
-        return ResponseEntity.ok("UserEmail captured successfully");
+        return ResponseEntity.ok("User email stored successfully");
     }
 }
