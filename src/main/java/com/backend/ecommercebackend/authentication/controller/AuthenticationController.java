@@ -2,9 +2,9 @@ package com.backend.ecommercebackend.authentication.controller;
 
 import com.backend.ecommercebackend.authentication.dto.request.AuthRequest;
 import com.backend.ecommercebackend.authentication.dto.request.LogoutRequest;
-import com.backend.ecommercebackend.authentication.model.AuthResponse;
 import com.backend.ecommercebackend.authentication.dto.request.RegisterRequest;
-import com.backend.ecommercebackend.authentication.service.serviceImpl.AuthenticationServiceImpl;
+import com.backend.ecommercebackend.authentication.model.AuthResponse;
+import com.backend.ecommercebackend.authentication.service.impl.AuthenticationServiceImpl;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

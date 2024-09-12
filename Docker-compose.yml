@@ -24,6 +24,5 @@ services:
 
 
 volumes:
-  securityData: { }
-  redis_data:
-    driver: { }
+  securityData: {}
+  redis_data: {}

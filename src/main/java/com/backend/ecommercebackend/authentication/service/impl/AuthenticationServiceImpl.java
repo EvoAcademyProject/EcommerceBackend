@@ -1,11 +1,11 @@
-package com.backend.ecommercebackend.authentication.service.serviceImpl;
+package com.backend.ecommercebackend.authentication.service.impl;
 
 import com.backend.ecommercebackend.authentication.dto.request.LogoutRequest;
+import com.backend.ecommercebackend.authentication.dto.request.RegisterRequest;
 import com.backend.ecommercebackend.authentication.jwt.JwtService;
 import com.backend.ecommercebackend.authentication.dto.request.AuthRequest;
 import com.backend.ecommercebackend.authentication.mapper.AuthMapper;
 import com.backend.ecommercebackend.authentication.model.AuthResponse;
-import com.backend.ecommercebackend.authentication.dto.request.RegisterRequest;
 import com.backend.ecommercebackend.authentication.service.AuthenticationService;
 import com.backend.ecommercebackend.cache.service.RedisTokenService;
 import com.backend.ecommercebackend.model.Role;
