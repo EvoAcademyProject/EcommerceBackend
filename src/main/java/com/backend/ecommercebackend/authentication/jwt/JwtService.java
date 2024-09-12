@@ -1,5 +1,6 @@
 package com.backend.ecommercebackend.authentication.jwt;
 
+import com.backend.ecommercebackend.cache.service.RedisTokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -14,8 +15,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
 
     @Value("${security.key}")
@@ -25,6 +28,7 @@ public class JwtService {
     @Value ("${access-token.expiration}")
     private Long accessTokenExpiration;
 
+    private final RedisTokenService redisTokenService;
 
     public String generateAccessToken(String email) {
         Map<String, Object> claims = new HashMap<>();
@@ -33,9 +37,10 @@ public class JwtService {
 
     public String generateRefreshToken(String email) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, email, refreshTokenExpiration);
+        String refreshToken = createToken(claims, email, refreshTokenExpiration);
+        redisTokenService.storeRefreshToken(email, refreshToken, refreshTokenExpiration);
+        return refreshToken;
     }
-
 
 
     private String createToken(Map<String, Object> claims, String email, long expiration) {
