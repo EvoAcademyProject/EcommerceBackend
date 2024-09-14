@@ -29,6 +29,17 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -41,10 +52,11 @@ public class SecurityConfig {
                    .authorizeHttpRequests( auth ->
                     auth
                             .requestMatchers("/api/v1/auth/**").permitAll()
+                            .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                             .anyRequest().authenticated()
                 )
 
-                 .cors(Customizer.withDefaults())
+                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                  .authenticationProvider(authenticationProvider)
                  .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
 
@@ -52,13 +64,5 @@ public class SecurityConfig {
 
          return http.build();
     }
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:8081", "http://localhost:5173"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+
 }
