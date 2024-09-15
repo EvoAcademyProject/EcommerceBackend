@@ -22,7 +22,11 @@ public class RegisterRequest {
     private String lastName;
 
     @NotBlank(message = "Email is required")
-    @Email(regexp = ".+@gmail\\.com", message = "Email must be a valid Gmail address")
+    @Email(message = "Email must be valid")
+    @Pattern(
+            regexp = "^[A-Za-z0-9._%+-]+@(gmail\\.com|yahoo\\.com|email\\.ru|.*\\.edu)$",
+            message = "Email must be a valid Gmail, Yahoo, email.ru, or educational domain"
+    )
     private String email;
 
     @NotBlank(message = "Password is required")
