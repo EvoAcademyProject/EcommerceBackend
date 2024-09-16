@@ -10,7 +10,6 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterRequest {
@@ -34,4 +33,5 @@ public class RegisterRequest {
     @Pattern(regexp = ".*\\d.*", message = "Password must contain at least one digit")
     @Pattern(regexp = ".*[a-zA-Z].*", message = "Password must contain at least one letter")
     private String password;
+    private String confirmPassword;
 }

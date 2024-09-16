@@ -42,6 +42,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthResponse register(RegisterRequest request) {
+        if(!request.getConfirmPassword().equals(request.getPassword())){
+            throw new RuntimeException("password does not match");
+        }
         User user = authMapper.RegisterDtoToEntity(request,passwordEncoder);
         user.setRole(Role.USER);
         user.setCreatedAt(LocalDateTime.now());
