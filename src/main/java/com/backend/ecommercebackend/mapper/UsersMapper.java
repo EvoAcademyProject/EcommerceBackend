@@ -10,6 +10,6 @@ import java.util.List;
 public interface UsersMapper {
 
     List<UsersDto> entityListToDtoList(List<User> usersList);
-    UsersDto entityToDto(User users);
+    UsersDto entityToDto(User user);
 
 }

@@ -13,11 +13,10 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UsersDto {
     Long id;
-    String name;
-    String surname;
+    String firstName;
+    String lastName;
     String email;
-    String username;
-    Integer age;
+    String password;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 }
