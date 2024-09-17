@@ -20,5 +20,6 @@ public class Category {
     Long id;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     CategoryType type;
 }
