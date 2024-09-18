@@ -1,6 +1,7 @@
 package com.backend.ecommercebackend.service.impl;
 
 import com.backend.ecommercebackend.dto.request.EmailRequest;
+import com.backend.ecommercebackend.model.User;
 import com.backend.ecommercebackend.model.UserEmail;
 import com.backend.ecommercebackend.repository.EmailRepository;
 import com.backend.ecommercebackend.repository.UserRepository;
@@ -27,6 +28,8 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendEmail(String email) {
+        User userEmail=userRepository.findByEmail(email)
+                .orElseThrow(()->new IllegalArgumentException("user not found"));
         String verificationCode = createVerificationCode();
         String subject = "Şifrə dəyişikliyini təsdiqləmə kodunuz";
         String text = "təsdiqləmə kodu: " + verificationCode;
@@ -34,7 +37,7 @@ public class EmailServiceImpl implements EmailService {
         message.setFrom(from);
         message.setSubject(subject);
         message.setText(text);
-        message.setTo(email);
+        message.setTo(userEmail.getEmail());
         mailSender.send(message);
         redisVerificationService.storeEmailVerificationCode(email,verificationCode);
     }
