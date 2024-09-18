@@ -32,7 +32,7 @@ public class AuthenticationController {
         return  ResponseEntity.ok(service.register(request));
     }
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login (@RequestBody AuthRequest request){
+    public ResponseEntity<AuthResponse> login (@Valid @RequestBody AuthRequest request){
         return ResponseEntity.ok(service.authenticate(request));
     }
     @PostMapping("/refresh")
@@ -42,7 +42,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@RequestBody LogoutRequest request) {
+    public ResponseEntity<String> logout(@Valid @RequestBody LogoutRequest request) {
         service.logout(request);
         return ResponseEntity.ok("Logged out successfully");
     }
