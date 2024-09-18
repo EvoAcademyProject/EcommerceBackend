@@ -8,6 +8,8 @@ import com.backend.ecommercebackend.authentication.mapper.AuthMapper;
 import com.backend.ecommercebackend.authentication.model.AuthResponse;
 import com.backend.ecommercebackend.authentication.service.AuthenticationService;
 import com.backend.ecommercebackend.cache.service.RedisTokenService;
+import com.backend.ecommercebackend.enums.Exceptions;
+import com.backend.ecommercebackend.exception.InvalidTokenException;
 import com.backend.ecommercebackend.model.Role;
 import com.backend.ecommercebackend.model.User;
 import com.backend.ecommercebackend.repository.UserRepository;
@@ -85,9 +87,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (redisTokenService.validateRefreshToken(email, token)) {
             redisTokenService.deleteRefreshToken(email);
         } else {
-            throw new IllegalArgumentException("Invalid refresh token");
+            throw new InvalidTokenException(Exceptions.INVALID_TOKEN_EXCEPTION.getHttpStatus(),
+                    Exceptions.INVALID_TOKEN_EXCEPTION.getMessage() );
         }
     }
+
     @Override
     public void refreshAuthToken(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userEmail;
