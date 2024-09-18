@@ -1,13 +1,12 @@
 package com.backend.ecommercebackend.authentication.config;
 
-import com.backend.ecommercebackend.authentication.exception.CustomAccessDeniedHandler;
-import com.backend.ecommercebackend.authentication.exception.CustomAuthenticationEntryPoint;
+import com.backend.ecommercebackend.exception.CustomAccessDeniedHandler;
+import com.backend.ecommercebackend.exception.CustomAuthenticationEntryPoint;
 import com.backend.ecommercebackend.authentication.jwt.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
