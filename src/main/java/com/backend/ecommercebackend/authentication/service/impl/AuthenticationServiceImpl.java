@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -49,8 +50,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setRole(Role.USER);
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
-        repository.save(user);
-
+        try {
+            repository.save(user);
+        }
+        catch (DataIntegrityViolationException e) {
+            throw new ApplicationException(Exceptions.USER_ALREADY_EXIST);
+        }
         emailService.deleteStoredEmail(request.getEmail());
 
         String accessToken = jwtService.generateAccessToken(user.getEmail());
