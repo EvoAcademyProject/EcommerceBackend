@@ -27,7 +27,7 @@ public class PasswordController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<Boolean> verifyEmail(@RequestBody EmailVerifyRequest request){
+    public ResponseEntity<Boolean> verifyEmail(@Valid @RequestBody EmailVerifyRequest request){
         return ResponseEntity.ok(service.verifyEmail(request));
     }
 }
