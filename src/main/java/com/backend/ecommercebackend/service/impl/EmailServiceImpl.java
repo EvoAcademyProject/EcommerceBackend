@@ -1,6 +1,9 @@
 package com.backend.ecommercebackend.service.impl;
 
 import com.backend.ecommercebackend.dto.request.EmailRequest;
+import com.backend.ecommercebackend.enums.Exceptions;
+import com.backend.ecommercebackend.exception.ApplicationException;
+import com.backend.ecommercebackend.model.User;
 import com.backend.ecommercebackend.model.UserEmail;
 import com.backend.ecommercebackend.repository.EmailRepository;
 import com.backend.ecommercebackend.repository.UserRepository;
@@ -8,6 +11,7 @@ import com.backend.ecommercebackend.service.EmailService;
 import com.backend.ecommercebackend.cache.service.RedisVerificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -26,7 +30,9 @@ public class EmailServiceImpl implements EmailService {
     private final UserRepository userRepository;
 
     @Override
-    public void sendEmail(String email) {
+    public void sendVerificationCode(String email) {
+        User userEmail=userRepository.findByEmail(email)
+                .orElseThrow(()->new ApplicationException(Exceptions.USER_NOT_FOUND));
         String verificationCode = createVerificationCode();
         String subject = "Şifrə dəyişikliyini təsdiqləmə kodunuz";
         String text = "təsdiqləmə kodu: " + verificationCode;
@@ -34,7 +40,7 @@ public class EmailServiceImpl implements EmailService {
         message.setFrom(from);
         message.setSubject(subject);
         message.setText(text);
-        message.setTo(email);
+        message.setTo(userEmail.getEmail());
         mailSender.send(message);
         redisVerificationService.storeEmailVerificationCode(email,verificationCode);
     }
@@ -48,14 +54,18 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void storeEmail(EmailRequest request) {
-        if (userRepository.findByEmail(request.getEmail()).isEmpty()) {
-            UserEmail userEmail = UserEmail.builder()
-                    .email(request.getEmail())
-                    .createdAt(LocalDateTime.now())
-                    .build();
-            emailRepository.save(userEmail);
-        } else {
-            throw new IllegalArgumentException("User with this email has already registered");
+        try {
+            if (userRepository.findByEmail(request.getEmail()).isEmpty()) {
+                UserEmail userEmail = UserEmail.builder()
+                        .email(request.getEmail())
+                        .createdAt(LocalDateTime.now())
+                        .build();
+                emailRepository.save(userEmail);
+            } else {
+                throw new ApplicationException(Exceptions.USER_ALREADY_EXIST);
+            }
+        } catch (DataIntegrityViolationException e) {
+            throw new ApplicationException(Exceptions.USER_ALREADY_EXIST);
         }
     }
 

@@ -8,19 +8,20 @@ import com.backend.ecommercebackend.authentication.mapper.AuthMapper;
 import com.backend.ecommercebackend.authentication.model.AuthResponse;
 import com.backend.ecommercebackend.authentication.service.AuthenticationService;
 import com.backend.ecommercebackend.cache.service.RedisTokenService;
+import com.backend.ecommercebackend.enums.Exceptions;
+import com.backend.ecommercebackend.exception.ApplicationException;
 import com.backend.ecommercebackend.model.Role;
 import com.backend.ecommercebackend.model.User;
 import com.backend.ecommercebackend.repository.UserRepository;
 import com.backend.ecommercebackend.service.impl.EmailServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -43,14 +44,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public AuthResponse register(RegisterRequest request) {
         if(!request.getConfirmPassword().equals(request.getPassword())){
-            throw new RuntimeException("password does not match");
+            throw new ApplicationException(Exceptions.PASSWORD_MISMATCH_EXCEPTION);
         }
         User user = authMapper.RegisterDtoToEntity(request,passwordEncoder);
         user.setRole(Role.USER);
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
-        repository.save(user);
-
+        try {
+            repository.save(user);
+        }
+        catch (DataIntegrityViolationException e) {
+            throw new ApplicationException(Exceptions.USER_ALREADY_EXIST);
+        }
         emailService.deleteStoredEmail(request.getEmail());
 
         String accessToken = jwtService.generateAccessToken(user.getEmail());
@@ -68,7 +73,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()));
-        User user = repository.findByEmail(request.getEmail()).orElseThrow(()-> new UsernameNotFoundException("user not found"));
+        User user = repository.findByEmail(request.getEmail()).orElseThrow(()-> new ApplicationException(Exceptions.USER_NOT_FOUND));
         String accessToken = jwtService.generateAccessToken(user.getEmail());
         String refreshToken=jwtService.generateRefreshToken(user.getEmail());
 
@@ -82,14 +87,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public void logout(LogoutRequest request) {
         var token = request.getRefreshToken();
         String email = request.getEmail();
-        if (redisTokenService.validateRefreshToken(email, token)) {
-            redisTokenService.deleteRefreshToken(email);
-        } else {
-            throw new IllegalArgumentException("Invalid refresh token");
+            if (redisTokenService.validateRefreshToken(email, token)) {
+                redisTokenService.deleteRefreshToken(email);
+            } else {
+                throw new ApplicationException(Exceptions.INVALID_TOKEN_EXCEPTION);
+            }
         }
-    }
+
     @Override
-    public void refreshAuthToken(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void refreshAuthToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String userEmail;
         String refreshToken;
         AuthResponse authResponse;
@@ -107,6 +113,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         .refreshToken(refreshToken)
                         .accessToken(accessToken).build();
                 new ObjectMapper().writeValue(response.getOutputStream(),authResponse);
+            }
+            else {
+              throw new ApplicationException(Exceptions.USER_NOT_FOUND);
             }
         }
     }

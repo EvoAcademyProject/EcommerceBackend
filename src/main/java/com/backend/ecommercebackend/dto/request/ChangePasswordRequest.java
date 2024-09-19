@@ -12,9 +12,6 @@ import jakarta.validation.constraints.Pattern;
 @AllArgsConstructor
 public class ChangePasswordRequest {
 
-    @NotBlank(message = "Old password is required")
-    private String oldPassword;
-
     @NotBlank(message = "New password is required")
     @Pattern(
             regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d_!@#$%^&*()+=-]{8,}$",

@@ -1,14 +1,14 @@
-package com.backend.ecommercebackend.authentication.exception;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+package com.backend.ecommercebackend.exception;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
-@RestControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -20,9 +20,10 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
   }
 
-  @ExceptionHandler(IllegalStateException.class)
-  public ResponseEntity<String> handleIllegalStateException(IllegalStateException ex) {
-    return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+  @ExceptionHandler(ApplicationException.class)
+  public ResponseEntity<String> handleApplicationException(ApplicationException ex) {
+    return ResponseEntity.status(ex.getHttpStatus())
+            .body(ex.getMessage());
   }
-}
+  }
 

@@ -1,7 +1,6 @@
 package com.backend.ecommercebackend.authentication.dto.request;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.validation.constraints.Email;
@@ -33,5 +32,6 @@ public class RegisterRequest {
     @Pattern(regexp = ".*\\d.*", message = "Password must contain at least one digit")
     @Pattern(regexp = ".*[a-zA-Z].*", message = "Password must contain at least one letter")
     private String password;
+    @NotBlank(message = "Password is required")
     private String confirmPassword;
 }
