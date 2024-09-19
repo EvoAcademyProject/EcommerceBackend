@@ -1,8 +1,10 @@
 package com.backend.ecommercebackend.controller;
 
 import com.backend.ecommercebackend.dto.ProductDto;
+import com.backend.ecommercebackend.service.ProductService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +37,9 @@ public class ProductController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-    return ResponseEntity( service.deleteProduct(id));
+  public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
+    service.deleteProduct(id);
+    return ResponseEntity.ok("Product deleted successfully");
+
   }
 }
