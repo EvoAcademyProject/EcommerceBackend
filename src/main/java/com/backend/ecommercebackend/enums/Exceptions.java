@@ -8,7 +8,12 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum Exceptions {
-  INVALID_TOKEN_EXCEPTION(HttpStatus.BAD_REQUEST, ExceptionMessage.TOKEN_IS_INVALID_MSG);
+
+  INVALID_TOKEN_EXCEPTION(HttpStatus.BAD_REQUEST, ExceptionMessage.TOKEN_IS_INVALID_MSG),
+  PASSWORD_MISMATCH_EXCEPTION(HttpStatus.BAD_REQUEST,ExceptionMessage.PASSWORD_MISMATCH_MSG),
+  USER_NOT_FOUND(HttpStatus.NOT_FOUND,ExceptionMessage.USER_NOT_FOUND_MSG),
+  USER_ALREADY_EXIST(HttpStatus.BAD_REQUEST,ExceptionMessage.USER_ALREADY_EXIST_MSG),
+  PASSWORD_SAME_AS_OLD_EXCEPTION(HttpStatus.BAD_REQUEST,ExceptionMessage.PASSWORD_SAME_AS_OLD_MSG);
 
   private final HttpStatus httpStatus;
   private final String message;
