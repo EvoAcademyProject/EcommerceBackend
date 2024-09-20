@@ -34,4 +34,5 @@ public class RegisterRequest {
     private String password;
     @NotBlank(message = "Password is required")
     private String confirmPassword;
+    private Boolean acceptTerms;
 }

@@ -46,6 +46,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if(!request.getConfirmPassword().equals(request.getPassword())){
             throw new ApplicationException(Exceptions.PASSWORD_MISMATCH_EXCEPTION);
         }
+        if(!request.getAcceptTerms().equals(Boolean.TRUE)){
+            throw new RuntimeException("accept terms not supported");
+        }
         User user = authMapper.RegisterDtoToEntity(request,passwordEncoder);
         user.setRole(Role.USER);
         user.setCreatedAt(LocalDateTime.now());
