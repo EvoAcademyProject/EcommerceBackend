@@ -9,27 +9,34 @@ spring:
       timeout: 60000
       client-type: lettuce
 
+
   datasource:
-    url: jdbc:postgresql://localhost:5437/User
-    username: SECURITY
-    password: SECURITY
+    first:
+      url: jdbc:postgresql://localhost:5437/User
+      username: SECURITY
+      password: SECURITY
+    second:
+      url: jdbc:postgresql://localhost:5433/EvoProduct
+      username: ROOT
+      password: 1234
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+
+
+
   mail:
     host: smtp.gmail.com
     port: 587
     username: memmedlisedat033@gmail.com
     password: ghfs orqj yyyf envz
     properties:
-        mail.transport.protocol: smtp
-        mail.smtp.auth: true
-        mail.smtp.starttls.enable: true
-        mail.debug: true
+      mail.transport.protocol: smtp
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.debug: true
 
 security:
   key: "jvdIc8VZQrh6T17RAywe6e/3u7wQ/WEXIUuLD1FWYo01yQcjjmjOBfwY/KeHu5cBaNMeJI0pZIMOwNCQuVnMvQ=="

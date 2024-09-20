@@ -38,7 +38,6 @@ public class AuthenticationController {
     @PostMapping("/refresh")
     public void refreshAuthToken(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         service.refreshAuthToken(request, response);
-
     }
 
     @PostMapping("/logout")

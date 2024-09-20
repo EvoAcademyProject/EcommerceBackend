@@ -1,4 +1,4 @@
-package com.backend.ecommercebackend.repository;
+package com.backend.ecommercebackend.repository.user;
 
 import com.backend.ecommercebackend.model.UserEmail;
 import jakarta.transaction.Transactional;

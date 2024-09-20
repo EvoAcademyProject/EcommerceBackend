@@ -12,7 +12,7 @@ import com.backend.ecommercebackend.enums.Exceptions;
 import com.backend.ecommercebackend.exception.ApplicationException;
 import com.backend.ecommercebackend.model.Role;
 import com.backend.ecommercebackend.model.User;
-import com.backend.ecommercebackend.repository.UserRepository;
+import com.backend.ecommercebackend.repository.user.UserRepository;
 import com.backend.ecommercebackend.service.impl.EmailServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,11 +43,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthResponse register(RegisterRequest request) {
+
         if(!request.getConfirmPassword().equals(request.getPassword())){
             throw new ApplicationException(Exceptions.PASSWORD_MISMATCH_EXCEPTION);
         }
-        if(!request.getAcceptTerms().equals(Boolean.TRUE)){
-            throw new RuntimeException("accept terms not supported");
+
+        if(request.getAcceptTerms().equals(Boolean.FALSE)){
+            throw new RuntimeException("accept terms can be choose");
         }
         User user = authMapper.RegisterDtoToEntity(request,passwordEncoder);
         user.setRole(Role.USER);
