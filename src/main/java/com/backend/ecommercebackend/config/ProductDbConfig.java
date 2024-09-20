@@ -1,8 +1,8 @@
 package com.backend.ecommercebackend.config;
 
+
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
@@ -12,8 +12,9 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
 import javax.sql.DataSource;
+
+
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
@@ -22,19 +23,25 @@ import javax.sql.DataSource;
         transactionManagerRef = "secondTransactionManager"
 )
 
-public class DbConfig2 {
+public class ProductDbConfig {
+
     @Bean(name = "secondDataSource")
-    @ConfigurationProperties("spring.datasource.second")
     public DataSource secondDataSource() {
-        return DataSourceBuilder.create().build();
+        DataSourceBuilder<?> builder = DataSourceBuilder.create();
+        builder.url("jdbc:postgresql://localhost:5433/EvoProduct");
+        builder.username("ROOT");
+        builder.password("1234");
+        builder.driverClassName("org.postgresql.Driver");
+        return builder.build();
     }
+
 
     @Bean(name = "secondEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean secondEntityManagerFactory(
             EntityManagerFactoryBuilder builder) {
         return builder
                 .dataSource(secondDataSource())
-                .packages("com.backend.ecommercebackend.model.Product","com.backend.ecommercebackend.model.Category")
+                .packages("com.backend.ecommercebackend.model")
                 .persistenceUnit("second")
                 .build();
     }
