@@ -3,6 +3,7 @@ package com.backend.ecommercebackend.config;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
@@ -25,13 +26,22 @@ import javax.sql.DataSource;
 
 public class ProductDbConfig {
 
+    @Value("${spring.datasource.second.url}")
+    private String secondDbUrl;
+
+    @Value("${spring.datasource.second.username}")
+    private String secondDbUsername;
+
+    @Value("${spring.datasource.second.password}")
+    private String secondDbPassword;
+
+
     @Bean(name = "secondDataSource")
     public DataSource secondDataSource() {
         DataSourceBuilder<?> builder = DataSourceBuilder.create();
-        builder.url("jdbc:postgresql://localhost:5433/EvoProduct");
-        builder.username("ROOT");
-        builder.password("1234");
-        builder.driverClassName("org.postgresql.Driver");
+        builder.url(secondDbUrl);
+        builder.username(secondDbUsername);
+        builder.password(secondDbPassword);
         return builder.build();
     }
 

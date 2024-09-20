@@ -14,6 +14,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.beans.factory.annotation.Value;
 
 
 @Configuration
@@ -25,14 +26,23 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 )
 public class UserDbConfig {
 
+  @Value("${spring.datasource.first.url}")
+  private String firstDbUrl;
+
+  @Value("${spring.datasource.first.username}")
+  private String firstDbUsername;
+
+  @Value("${spring.datasource.first.password}")
+  private String firstDbPassword;
+
+
   @Primary
   @Bean(name = "firstDataSource")
   public DataSource firstDataSource() {
     DataSourceBuilder<?> builder = DataSourceBuilder.create();
-    builder.url("jdbc:postgresql://localhost:5437/User");
-    builder.username("SECURITY");
-    builder.password("SECURITY");
-    builder.driverClassName("org.postgresql.Driver");
+    builder.url(firstDbUrl);
+    builder.username(firstDbUsername);
+    builder.password(firstDbPassword);
     return builder.build();
   }
 
