@@ -1,29 +1,20 @@
 package com.backend.ecommercebackend.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import com.backend.ecommercebackend.enums.CategoryType;
+import jakarta.persistence.*;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 import org.springframework.format.annotation.DateTimeFormat;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -34,13 +25,12 @@ public class ProductSpecification {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Long id;
 
-  @ManyToOne
-  @JoinColumn(name = "product_id", nullable = false)
-  Product product;
+  @Column(nullable = false)
+  String specificationName;
 
-  @JdbcTypeCode(SqlTypes.JSON)
-  @Column(columnDefinition = "jsonb", nullable = false)
-  Map<String, Object> specifications;
+  @ManyToOne
+  @JoinColumn(name = "product_id")
+  Product product;
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false, updatable = false)

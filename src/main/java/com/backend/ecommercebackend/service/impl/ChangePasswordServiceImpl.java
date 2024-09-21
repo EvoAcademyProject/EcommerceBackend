@@ -5,7 +5,7 @@ import com.backend.ecommercebackend.dto.request.EmailVerifyRequest;
 import com.backend.ecommercebackend.enums.Exceptions;
 import com.backend.ecommercebackend.exception.ApplicationException;
 import com.backend.ecommercebackend.model.User;
-import com.backend.ecommercebackend.repository.UserRepository;
+import com.backend.ecommercebackend.repository.user.UserRepository;
 import com.backend.ecommercebackend.service.ChangePasswordService;
 import com.backend.ecommercebackend.cache.service.RedisVerificationService;
 import lombok.RequiredArgsConstructor;
