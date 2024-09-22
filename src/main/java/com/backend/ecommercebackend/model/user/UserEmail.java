@@ -1,36 +1,43 @@
-package com.backend.ecommercebackend.model;
+package com.backend.ecommercebackend.model.user;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-
-import com.backend.ecommercebackend.enums.CategoryType;
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.type.SqlTypes;
 import org.springframework.format.annotation.DateTimeFormat;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
+@Builder
 @AllArgsConstructor
 @Entity
-@Table(name = "product-specification")
+@Table(name = "user-email")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductSpecification {
+public class UserEmail {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Long id;
 
-  @Column(nullable = false)
-  String specificationName;
-
-  @ManyToOne
-  @JoinColumn(name = "product_id")
-  Product product;
+  @Email
+  @NotEmpty
+  @Column(nullable = false, unique = true)
+  String email;
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false, updatable = false)
