@@ -10,8 +10,8 @@ import com.backend.ecommercebackend.authentication.service.AuthenticationService
 import com.backend.ecommercebackend.cache.service.RedisTokenService;
 import com.backend.ecommercebackend.enums.Exceptions;
 import com.backend.ecommercebackend.exception.ApplicationException;
-import com.backend.ecommercebackend.model.Role;
-import com.backend.ecommercebackend.model.User;
+import com.backend.ecommercebackend.model.user.Role;
+import com.backend.ecommercebackend.model.user.User;
 import com.backend.ecommercebackend.repository.user.UserRepository;
 import com.backend.ecommercebackend.service.impl.EmailServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
