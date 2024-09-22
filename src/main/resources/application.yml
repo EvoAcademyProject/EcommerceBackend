@@ -21,13 +21,8 @@ spring:
       password: 1234
 
   jpa:
-    first:
       hibernate:
-        ddl-auto: create
-    second:
-      hibernate:
-        ddl-auto: create
-
+        ddl-auto: update
 
 
 

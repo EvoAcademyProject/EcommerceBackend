@@ -37,7 +37,7 @@ public class ProductDbConfig {
     @Value("${spring.datasource.second.password}")
     private String secondDbPassword;
 
-    @Value("${spring.jpa.second.hibernate.ddl-auto}")
+    @Value("${spring.jpa.hibernate.ddl-auto}")
     private String secondDbDdlAuto;
 
 
