@@ -39,6 +39,9 @@ public class UserEmail {
   @Column(nullable = false, unique = true)
   String email;
 
+  @Builder.Default
+  private boolean verified = false;
+
   @CreationTimestamp
   @Column(name = "created_at", nullable = false, updatable = false)
   @DateTimeFormat(pattern = "yyyy-MM-dd")

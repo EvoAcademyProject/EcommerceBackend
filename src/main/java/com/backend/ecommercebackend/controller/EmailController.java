@@ -1,5 +1,6 @@
 package com.backend.ecommercebackend.controller;
 
+import com.backend.ecommercebackend.dto.request.EmailActivationRequest;
 import com.backend.ecommercebackend.dto.request.EmailRequest;
 import com.backend.ecommercebackend.service.impl.EmailServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,12 @@ public class EmailController {
 
     @PostMapping("/register-email")
     public ResponseEntity<String> storeEmail(@Valid @RequestBody EmailRequest request) {
-        emailService.storeEmail(request);
+        emailService.registerEmail(request);
         return ResponseEntity.ok("User email stored successfully");
+    }
+    @PostMapping("/activate")
+    public ResponseEntity<String> activateUser(@Valid @RequestBody EmailActivationRequest request) {
+        emailService.activateEmail(request);
+        return ResponseEntity.ok("User activated successfully");
     }
 }
