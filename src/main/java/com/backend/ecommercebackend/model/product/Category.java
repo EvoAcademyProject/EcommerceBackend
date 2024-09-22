@@ -1,4 +1,4 @@
-package com.backend.ecommercebackend.model;
+package com.backend.ecommercebackend.model.product;
 
 
 import com.backend.ecommercebackend.enums.CategoryType;

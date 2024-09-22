@@ -1,6 +1,6 @@
-package com.backend.ecommercebackend.repository.product;
+package com.backend.ecommercebackend.repository.category;
 
-import com.backend.ecommercebackend.model.Category;
+import com.backend.ecommercebackend.model.product.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
