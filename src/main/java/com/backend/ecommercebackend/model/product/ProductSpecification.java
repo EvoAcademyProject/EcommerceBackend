@@ -17,14 +17,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class ProductSpecification {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  Long id;
+  Long specificationId;
 
   @Column(nullable = false)
   String specificationName;
 
-  @ManyToOne
-  @JoinColumn(name = "product_id")
-  Product product;
+  @Column(nullable = false)
+  int categoryId;
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false, updatable = false)
