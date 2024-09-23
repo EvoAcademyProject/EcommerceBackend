@@ -1,14 +1,12 @@
-package com.backend.ecommercebackend.model;
+package com.backend.ecommercebackend.model.product;
 
 
-import com.backend.ecommercebackend.enums.CategoryType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -42,11 +40,9 @@ public class Product {
     String imageUrl;
 
     @JoinColumn(nullable = false)
-    @Enumerated(EnumType.STRING)
-    CategoryType category;
+    String categoryName;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb", nullable = false)
-    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
-    List<ProductSpecification> specificationName;
+    List<Object> specifications;
 }

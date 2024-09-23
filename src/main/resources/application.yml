@@ -19,10 +19,12 @@ spring:
       url: jdbc:postgresql://localhost:5433/EvoProduct
       username: ROOT
       password: 1234
+
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
+
 
 
 

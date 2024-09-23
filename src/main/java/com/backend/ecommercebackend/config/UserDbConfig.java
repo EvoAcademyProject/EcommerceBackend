@@ -15,6 +15,8 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.beans.factory.annotation.Value;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Configuration
@@ -35,6 +37,8 @@ public class UserDbConfig {
   @Value("${spring.datasource.first.password}")
   private String firstDbPassword;
 
+  @Value("${spring.jpa.hibernate.ddl-auto}")
+  private String firstDbDdlAuto;
 
   @Primary
   @Bean(name = "firstDataSource")
@@ -53,8 +57,9 @@ public class UserDbConfig {
           EntityManagerFactoryBuilder builder) {
     return builder
             .dataSource(firstDataSource())
-            .packages("com.backend.ecommercebackend.model")
+            .packages("com.backend.ecommercebackend.model.user")
             .persistenceUnit("first")
+            .properties(hibernateProperties())
             .build();
   }
 
@@ -63,5 +68,11 @@ public class UserDbConfig {
   public PlatformTransactionManager firstTransactionManager(
           @Qualifier("firstEntityManagerFactory") EntityManagerFactory firstEntityManagerFactory) {
     return new JpaTransactionManager(firstEntityManagerFactory);
+  }
+
+  private Map<String, Object> hibernateProperties() {
+    Map<String, Object> properties = new HashMap<>();
+    properties.put("hibernate.hbm2ddl.auto", firstDbDdlAuto);
+    return properties;
   }
 }
