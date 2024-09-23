@@ -21,8 +21,11 @@ spring:
       password: 1234
 
   jpa:
-      hibernate:
-        ddl-auto: update
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+
+
 
 
 
