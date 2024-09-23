@@ -22,7 +22,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
 
 
 
@@ -48,6 +48,9 @@ access-token:
 
 verification-code:
   expiration: 300000
+
+activation-token:
+  expiration: 864000000
 
 server:
   port: 8081
