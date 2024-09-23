@@ -19,8 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 class RedisTokenControllerIT {
 
   private static final String REFRESH_TOKEN = "eyJhbGciOiJIUzUxMiJ9" +
-          ".eyJzdWIiOiJ5ZWdhbmFAZXhhbXBsZS5jb20iLCJpYXQiOjE3MjYxNDU3MDcsImV4cCI6MTcyODczNzcwN30.5KCM62V2Txk_o9FraqfozlcmcfEYr9QEcMKf_ZY_4_CiTRWfYD7stwy029Y6eFFhBJLtGsAjNPW_ZqG1C7gVhw";
-
+          ".eyJzdWIiOiJrYXRlQGdtYWlsLmNvbSIsImlhdCI6MTcyNjM5MzgzNSwiZXhwIjoxNzI4OTg1ODM1fQ.vkt81z0O3msrIOs6GrjtlKgZSTXC-d1CeeCFzc4lJeqd25ipFDxnN2AfKGv6mQgnSJrncgqspHwFKv38NtgWMg";
   @Autowired
   private RedisTemplate<String, String> redisTemplate;
   @Autowired
@@ -31,7 +30,7 @@ class RedisTokenControllerIT {
 
   @BeforeEach
   void resetRedis() {
-    redisTemplate.keys("*refresh_token:yegana@example.com*").forEach(redisTemplate::delete);
+    redisTemplate.keys("*refresh_token:kate@gmail.com*").forEach(redisTemplate::delete);
   }
 
   @Test
@@ -39,14 +38,14 @@ class RedisTokenControllerIT {
   void shouldStoreAndRetrieveRefreshToken() throws Exception {
 
     mockMvc.perform(post("/api/v1/auth/store")
-                    .param("email","yegana@example.com")
+                    .param("email","kate@gmail.com")
                     .param("token",REFRESH_TOKEN)
                     .param("expirationTime", String.valueOf(2592000000L)))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().string("Token stored successfully"));
 
-    var storedToken = redisTokenService.getRefreshToken("yegana@example.com");
-    var refreshTokenCache = redisTemplate.opsForValue().get("refresh_token:yegana@example.com");
+    var storedToken = redisTokenService.getRefreshToken("kate@gmail.com");
+    var refreshTokenCache = redisTemplate.opsForValue().get("refresh_token:kate@gmail.com");
 
     assertThat(refreshTokenCache).isNotNull();
     assertThat(storedToken).isEqualTo(REFRESH_TOKEN);

@@ -1,43 +1,30 @@
-package com.backend.ecommercebackend.model;
+package com.backend.ecommercebackend.model.product;
 
 import java.time.LocalDateTime;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
-@Builder
 @AllArgsConstructor
 @Entity
-@Table(name = "user-email")
+@Table(name = "product-specification")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserEmail {
-
+public class ProductSpecification {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Long id;
 
-  @Email
-  @NotEmpty
-  @Column(nullable = false, unique = true)
-  String email;
+  @Column(nullable = false)
+  String specificationName;
+
+  @ManyToOne
+  @JoinColumn(name = "product_id")
+  Product product;
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false, updatable = false)

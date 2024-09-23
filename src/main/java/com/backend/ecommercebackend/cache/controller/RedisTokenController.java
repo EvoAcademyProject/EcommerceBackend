@@ -1,5 +1,6 @@
 package com.backend.ecommercebackend.cache.controller;
 
+import com.backend.ecommercebackend.cache.service.RedisActivationTokenService;
 import com.backend.ecommercebackend.cache.service.RedisTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class RedisTokenController {
 
   private  final RedisTokenService redisTokenService;
+  private final RedisActivationTokenService redisActivationTokenService;
 
   @GetMapping("/get")
   public ResponseEntity<String> getRefreshToken(@RequestParam("email") String email) {
     String refreshToken = redisTokenService.getRefreshToken(email);
     return ResponseEntity.ok(refreshToken);
+  }
+
+  @GetMapping("/getActivationToken")
+  public ResponseEntity<String> getActivationToken(@RequestParam("email") String email) {
+    return ResponseEntity.ok(redisActivationTokenService.getActivationToken(email));
   }
 
   @PostMapping("/store")
@@ -29,4 +36,12 @@ public class RedisTokenController {
     redisTokenService.storeRefreshToken(email, token, expirationTime);
     return ResponseEntity.ok("Token stored successfully");
   }
+
+  @PostMapping("/storeActivationToken")
+  public ResponseEntity<String> storeActivationToken(@RequestParam("email") String email,
+                                                     @RequestParam("token") String token) {
+    redisActivationTokenService.storeActivationToken(email, token);
+    return ResponseEntity.ok("Token stored successfully");
+  }
+
 }

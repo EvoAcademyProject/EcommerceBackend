@@ -1,7 +1,7 @@
 package com.backend.ecommercebackend.authentication.mapper;
 
 import com.backend.ecommercebackend.authentication.dto.request.RegisterRequest;
-import com.backend.ecommercebackend.model.User;
+import com.backend.ecommercebackend.model.user.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.security.crypto.password.PasswordEncoder;

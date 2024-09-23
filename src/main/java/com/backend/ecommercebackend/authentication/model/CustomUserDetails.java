@@ -1,6 +1,6 @@
 package com.backend.ecommercebackend.authentication.model;
 
-import com.backend.ecommercebackend.model.User;
+import com.backend.ecommercebackend.model.user.User;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

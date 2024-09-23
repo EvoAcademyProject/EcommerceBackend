@@ -1,4 +1,4 @@
-package com.backend.ecommercebackend.model;
+package com.backend.ecommercebackend.model.product;
 
 
 import com.backend.ecommercebackend.enums.CategoryType;
@@ -7,8 +7,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-
-import java.math.BigDecimal;
 import java.util.List;
 
 @Entity

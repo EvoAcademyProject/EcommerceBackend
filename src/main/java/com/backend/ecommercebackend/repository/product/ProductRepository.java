@@ -1,6 +1,6 @@
 package com.backend.ecommercebackend.repository.product;
 
-import com.backend.ecommercebackend.model.Product;
+import com.backend.ecommercebackend.model.product.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
 package com.backend.ecommercebackend.mapper;
 
 import com.backend.ecommercebackend.dto.UsersDto;
-import com.backend.ecommercebackend.model.User;
+import com.backend.ecommercebackend.model.user.User;
 import org.mapstruct.Mapper;
 
 

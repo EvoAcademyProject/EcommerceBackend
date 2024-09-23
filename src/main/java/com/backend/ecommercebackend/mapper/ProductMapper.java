@@ -1,7 +1,7 @@
 package com.backend.ecommercebackend.mapper;
 
 import com.backend.ecommercebackend.dto.ProductDto;
-import com.backend.ecommercebackend.model.Product;
+import com.backend.ecommercebackend.model.product.Product;
 import java.util.List;
 import org.mapstruct.Mapper;
 

@@ -1,6 +1,8 @@
 package com.backend.ecommercebackend.config;
 
 
+import java.util.HashMap;
+import java.util.Map;
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +37,9 @@ public class ProductDbConfig {
     @Value("${spring.datasource.second.password}")
     private String secondDbPassword;
 
+    @Value("${spring.jpa.hibernate.ddl-auto}")
+    private String secondDbDdlAuto;
+
 
     @Bean(name = "secondDataSource")
     public DataSource secondDataSource() {
@@ -51,8 +56,9 @@ public class ProductDbConfig {
             EntityManagerFactoryBuilder builder) {
         return builder
                 .dataSource(secondDataSource())
-                .packages("com.backend.ecommercebackend.model")
+                .packages("com.backend.ecommercebackend.model.product")
                 .persistenceUnit("second")
+                .properties(hibernateProperties())
                 .build();
     }
 
@@ -60,5 +66,11 @@ public class ProductDbConfig {
     public PlatformTransactionManager secondTransactionManager(
             @Qualifier("secondEntityManagerFactory") EntityManagerFactory secondEntityManagerFactory) {
         return new JpaTransactionManager(secondEntityManagerFactory);
+    }
+
+    private Map<String, Object> hibernateProperties() {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("hibernate.hbm2ddl.auto", secondDbDdlAuto);
+        return properties;
     }
 }
