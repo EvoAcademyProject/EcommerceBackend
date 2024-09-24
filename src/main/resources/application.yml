@@ -19,10 +19,11 @@ spring:
       url: jdbc:postgresql://localhost:5433/EvoProduct
       username: ROOT
       password: 1234
-
   jpa:
-      hibernate:
-        ddl-auto: update
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+
 
 
 
@@ -49,7 +50,7 @@ verification-code:
   expiration: 300000
 
 activation-token:
-  expiration: 86400000
+  expiration: 864000000
 
 server:
   port: 8081
