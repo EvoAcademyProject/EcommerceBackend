@@ -1,15 +1,15 @@
 package com.backend.ecommercebackend.mapper;
 
 import com.backend.ecommercebackend.dto.UsersDto;
-import com.backend.ecommercebackend.model.Users;
+import com.backend.ecommercebackend.model.user.User;
 import org.mapstruct.Mapper;
+
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface UsersMapper {
-
-    List<UsersDto> entityListToDtoList(List<Users> usersList);
-    UsersDto entityToDto(Users users);
+    List<UsersDto> entityListToDtoList(List<User> usersList);
+    UsersDto entityToDto(User user);
 
 }
