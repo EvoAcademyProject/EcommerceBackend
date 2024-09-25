@@ -13,6 +13,7 @@ public class ApplicationException extends RuntimeException{
     super(exception.getMessage());
     this.exception = exception;
   }
+
   public HttpStatus getHttpStatus() {
     return exception.getHttpStatus();
   }

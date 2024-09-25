@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/api/v1/product/")
@@ -29,6 +30,11 @@ public class ProductController {
     return ResponseEntity.ok(service.getAllProduct());
   }
 
+//  @GetMapping("/getProducts/{categoryName}")
+//  public ResponseEntity<List<ProductResponse>> getProductByCategoryName(@PathVariable String categoryName){
+//    return ResponseEntity.ok(service.getProductByCategoryName(categoryName));
+//  }
+
   @GetMapping("/{id}")
   public ResponseEntity<ProductResponse> getProductById(@PathVariable Long id){
     return ResponseEntity.ok(service.getProductById(id));
@@ -36,18 +42,22 @@ public class ProductController {
 
   @PostMapping
   public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest request ){
-    return ResponseEntity.ok(service.addProduct(request));
+     final var createdProduct = service.addProduct(request);
+     final var location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").build(createdProduct.getId());
+    return ResponseEntity.created(location).body(createdProduct);
   }
 
   @PutMapping("/{id}")
   public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id, @RequestBody ProductRequest request) {
-    return ResponseEntity.ok(service.updateProduct(id, request));
+    final var updatedProduct = service.updateProduct(id, request);
+    final var location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").build(updatedProduct.getId());
+    return ResponseEntity.created(location).body(updatedProduct);
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
+  public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
     service.deleteProduct(id);
-    return ResponseEntity.ok("Product deleted successfully");
+    return ResponseEntity.noContent().build();
 
   }
 }
