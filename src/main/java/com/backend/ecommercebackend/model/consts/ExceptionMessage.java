@@ -7,5 +7,6 @@ public class ExceptionMessage {
   public static final String USER_NOT_FOUND_MSG="User not found";
   public static final String USER_ALREADY_EXIST_MSG="User already exist";
   public static final String PASSWORD_SAME_AS_OLD_MSG="New password cannot be the same as the old password";
-
+  public static final String NOT_FOUND_EXCEPTION_MSG ="Not Found" ;
+  public static final String TERMS_ACCEPTANCE_EXCEPTION_MSG ="Please accept the terms to proceed" ;
 }
