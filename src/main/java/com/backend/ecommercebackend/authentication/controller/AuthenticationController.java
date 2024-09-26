@@ -8,7 +8,6 @@ import com.backend.ecommercebackend.authentication.service.impl.AuthenticationSe
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -38,8 +37,9 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.authenticate(request));
     }
     @PostMapping("/refresh")
-    public void refreshAuthToken(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        service.refreshAuthToken(request, response);
+    public ResponseEntity<AuthResponse> refreshAuthToken(HttpServletRequest request) throws IOException {
+        AuthResponse authResponse = service.refreshAuthToken(request);
+        return ResponseEntity.ok(authResponse);
     }
 
     @PostMapping("/logout")
