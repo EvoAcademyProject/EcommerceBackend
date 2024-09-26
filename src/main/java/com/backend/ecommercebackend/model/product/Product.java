@@ -27,7 +27,6 @@ public class Product {
     String modelNumber;
 
     @Column(nullable = false)
-    @Lob
     String description;
 
     @Column(nullable = false)
