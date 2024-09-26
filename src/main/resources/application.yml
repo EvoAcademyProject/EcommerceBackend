@@ -51,5 +51,8 @@ access-token:
 verification-code:
   expiration: 300000
 
+activation-token:
+  expiration: 864000000
+
 server:
   port: 8081
