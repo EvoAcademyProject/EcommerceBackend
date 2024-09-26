@@ -33,7 +33,13 @@ public class Product {
     int price;
 
     @Column(nullable = false)
-    float rating;
+    float ratingSum = 0.0f;
+
+    @Column(nullable = false)
+    int totalRatings = 0;
+
+    @Column(nullable = false)
+    float rating = 0.0f;
 
     @Column(nullable = false)
     String imageUrl;
