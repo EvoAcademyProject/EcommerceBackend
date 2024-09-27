@@ -9,6 +9,9 @@ import com.backend.ecommercebackend.model.product.Product;
 import com.backend.ecommercebackend.repository.product.ProductRepository;
 import com.backend.ecommercebackend.service.FileStorageService;
 import com.backend.ecommercebackend.service.ProductService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse addProduct(ProductRequest request, MultipartFile imageFile) {
+        if (request.getSpecifications() != null) {
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                List<Object> specifications = objectMapper.readValue(request.getSpecifications().toString(), new TypeReference<>() {});
+                request.setSpecifications(specifications);
+            } catch (JsonProcessingException e) {
+                throw new ApplicationException(Exceptions.INVALID_FORMAT_EXCEPTION);
+            }
+        }
         Product product = mapper.ProductDtoToEntity(request);
         if (imageFile != null && !imageFile.isEmpty()) {
             try {
