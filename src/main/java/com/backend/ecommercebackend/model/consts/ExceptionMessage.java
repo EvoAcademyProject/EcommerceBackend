@@ -10,4 +10,5 @@ public class ExceptionMessage {
   public static final String NOT_FOUND_EXCEPTION_MSG ="Not Found" ;
   public static final String TERMS_ACCEPTANCE_EXCEPTION_MSG ="Please accept the terms to proceed" ;
   public static final String IMAGE_STORAGE_EXCEPTION_MSG="Failed to store image";
+  public static final String CREATE_DIRECTORY_ERROR_MSG =  "Could not create upload directory!";
 }

@@ -1,5 +1,7 @@
 package com.backend.ecommercebackend.service.impl;
 
+import com.backend.ecommercebackend.enums.Exceptions;
+import com.backend.ecommercebackend.exception.ApplicationException;
 import com.backend.ecommercebackend.service.FileStorageService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +21,7 @@ public class FileStorageServiceImpl implements FileStorageService {
         try{
             Files.createDirectories(rootLocation);
         } catch(IOException e){
-            throw new RuntimeException("Could not create upload directory!",e);
+            throw new ApplicationException(Exceptions.DIRECTORY_CREATION_EXCEPTION);
         }
     }
 
