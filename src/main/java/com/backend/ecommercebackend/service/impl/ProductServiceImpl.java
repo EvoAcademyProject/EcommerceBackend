@@ -29,7 +29,8 @@ public class ProductServiceImpl implements ProductService {
         Product product = mapper.ProductDtoToEntity(request);
         if (imageFile != null && !imageFile.isEmpty()) {
             try {
-                String imageUrl = fileStorageService.storeFile(imageFile);
+                String fileName = fileStorageService.storeFile(imageFile);
+                String imageUrl = "https://ff82f4df-f72b-4dec-84ca-487132aff620.mock.pstmn.io/uploads/" + fileName;
                 product.setImageUrl(imageUrl);
             } catch (IOException e) {
                 throw new ApplicationException(Exceptions.IMAGE_STORAGE_EXCEPTION);
