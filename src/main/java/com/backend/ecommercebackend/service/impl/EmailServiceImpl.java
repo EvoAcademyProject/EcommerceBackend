@@ -13,7 +13,6 @@ import com.backend.ecommercebackend.service.EmailService;
 import com.backend.ecommercebackend.cache.service.RedisVerificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -69,7 +68,6 @@ public class EmailServiceImpl implements EmailService {
 
   @Override
   public void registerEmail(EmailRequest request) {
-    try {
       if (userRepository.findByEmail(request.getEmail()).isPresent()
               || emailRepository.findByEmail(request.getEmail()).isPresent()) {
         throw new ApplicationException(Exceptions.USER_ALREADY_EXIST);
@@ -82,10 +80,6 @@ public class EmailServiceImpl implements EmailService {
       sendActivationLink(userEmail.getEmail());
 
       emailRepository.save(userEmail);
-
-    } catch (DataIntegrityViolationException e) {
-      throw new ApplicationException(Exceptions.USER_ALREADY_EXIST);
-    }
   }
 
   @Override

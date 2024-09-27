@@ -18,7 +18,6 @@ public class ProductRequest {
     String name;
     String modelNumber;
     int price;
-    float rating;
     MultipartFile imageFile;
     String description;
     String categoryName;

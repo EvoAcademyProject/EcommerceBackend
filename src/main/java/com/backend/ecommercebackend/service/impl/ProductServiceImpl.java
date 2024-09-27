@@ -2,20 +2,23 @@ package com.backend.ecommercebackend.service.impl;
 
 import com.backend.ecommercebackend.dto.request.ProductRequest;
 import com.backend.ecommercebackend.dto.response.ProductResponse;
+import com.backend.ecommercebackend.enums.Exceptions;
+import com.backend.ecommercebackend.exception.ApplicationException;
 import com.backend.ecommercebackend.mapper.ProductMapper;
 import com.backend.ecommercebackend.model.product.Product;
 import com.backend.ecommercebackend.repository.product.ProductRepository;
 import com.backend.ecommercebackend.service.FileStorageService;
 import com.backend.ecommercebackend.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductServiceImpl implements ProductService {
     private final ProductMapper mapper;
     private final ProductRepository repository;
@@ -29,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
                 String imageUrl = fileStorageService.storeFile(imageFile);
                 product.setImageUrl(imageUrl);
             } catch (IOException e) {
-                throw new RuntimeException("Failed to store image", e);
+                throw new ApplicationException(Exceptions.IMAGE_STORAGE_EXCEPTION);
             }
         }
         repository.save(product);
@@ -38,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse getProductById(Long id) {
-       Product product= repository.findById(id).orElseThrow(()->new RuntimeException("product not found"));
+       Product product= repository.findById(id).orElseThrow(()->new ApplicationException(Exceptions.NOT_FOUND_EXCEPTION));
         return mapper.EntityToProductDto(product);
     }
 
@@ -49,7 +52,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse updateProduct(Long id, ProductRequest request, MultipartFile imageFile) {
-        Product product = repository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+        Product product = repository.findById(id).orElseThrow(() -> new ApplicationException(Exceptions.NOT_FOUND_EXCEPTION));
         mapper.updateProductFromProductDto(request, product);
         if (imageFile != null && !imageFile.isEmpty()) {
             try {
@@ -60,8 +63,7 @@ public class ProductServiceImpl implements ProductService {
                 }
                 product.setImageUrl(imageUrl);
             } catch (IOException e) {
-                throw new RuntimeException("Failed to store image", e);
-            }
+                throw new ApplicationException(Exceptions.IMAGE_STORAGE_EXCEPTION);            }
         }
         repository.save(product);
         return mapper.EntityToProductDto(product);
@@ -69,12 +71,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(Long id) {
-        Product product = repository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+        Product product = repository.findById(id).orElseThrow(() -> new ApplicationException(Exceptions.NOT_FOUND_EXCEPTION));
         if(product.getImageUrl()!=null){
             try{
                 fileStorageService.deleteFile(product.getImageUrl());
             } catch (IOException e) {
-                throw new RuntimeException("Failed to delete image",e);
+                log.error("Failed to delete image");
             }
         }
         repository.deleteById(id);
