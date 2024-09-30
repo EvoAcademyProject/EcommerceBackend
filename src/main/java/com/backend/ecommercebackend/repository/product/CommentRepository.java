@@ -12,8 +12,8 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment,Long> {
     @Transactional
     @Query("""
-select c from Comment c where c.productId=:productId
-""")
+            select c from Comment c where c.productId=:productId
+            """)
     List<Comment>findByProductId(Long productId);
 
     @Transactional

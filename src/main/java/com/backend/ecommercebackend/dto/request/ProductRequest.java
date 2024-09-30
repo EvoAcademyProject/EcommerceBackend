@@ -18,10 +18,8 @@ public class ProductRequest {
     String name;
     String modelNumber;
     int price;
-    MultipartFile imageFile;
+    List<MultipartFile> imageFile;
     String description;
     String categoryName;
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb", nullable = false)
     List<Object> specifications;
 }

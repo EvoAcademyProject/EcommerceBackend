@@ -19,7 +19,7 @@ public class ProductResponse {
     float rating;
     int ratingSum;
     int totalRatings;
-    String imageUrl;
+    List<String>imageUrl;
     String categoryName;
     List<Object> specifications;
 }

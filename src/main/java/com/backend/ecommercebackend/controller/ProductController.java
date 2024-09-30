@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/api/v1/product/")
@@ -41,13 +42,17 @@ public class ProductController {
   }
 
   @PostMapping
-  public ResponseEntity<ProductResponse> createProduct(@ModelAttribute ProductRequest request, @RequestParam("imageFile") MultipartFile imageFile) {
-    return ResponseEntity.ok(service.addProduct(request, imageFile));
+  public ResponseEntity<ProductResponse> createProduct(@ModelAttribute ProductRequest request, @RequestParam("imageFile") List<MultipartFile> imageFiles) {
+    final var createdProduct = service.addProduct(request, imageFiles);
+    final var location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").build(createdProduct.getId());
+    return ResponseEntity.created(location).body(createdProduct);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id, @RequestBody ProductRequest request, @RequestParam(value="imageFile") MultipartFile imageFile) {
-    return ResponseEntity.ok(service.updateProduct(id, request, imageFile));
+  public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id,@ModelAttribute ProductRequest request, @RequestParam(value="imageFile")List<MultipartFile> imageFiles) {
+    final var updatedProduct = service.updateProduct(id, request, imageFiles);
+    final var location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").build(updatedProduct.getId());
+    return ResponseEntity.created(location).body(updatedProduct);
   }
 
   @DeleteMapping("/{id}")

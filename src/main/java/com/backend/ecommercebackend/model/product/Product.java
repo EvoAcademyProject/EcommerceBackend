@@ -41,8 +41,9 @@ public class Product {
     @Column(nullable = false)
     float rating = 0.0f;
 
-    @Column(nullable = false)
-    String imageUrl;
+    @Column(columnDefinition = "jsonb", nullable = false)
+    @JdbcTypeCode(SqlTypes.JSON)
+    List<String> imageUrl;
 
     @JoinColumn(nullable = false)
     String categoryName;

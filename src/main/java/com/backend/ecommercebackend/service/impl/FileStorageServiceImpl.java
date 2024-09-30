@@ -15,7 +15,7 @@ import java.util.UUID;
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
 
-    private final Path rootLocation= Paths.get("uploads");
+    private final Path rootLocation=Paths.get("uploads");
 
     public FileStorageServiceImpl() {
         try{
