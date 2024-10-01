@@ -61,21 +61,26 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponse updateProduct(Long id, ProductRequest request, List<MultipartFile> imageFiles) {
+    public ProductResponse updateProduct(Long id, ProductRequest request, List<MultipartFile> imageFiles) throws IOException {
         Product product = repository.findById(id).orElseThrow(() -> new ApplicationException(Exceptions.NOT_FOUND_EXCEPTION));
         mapper.updateProductFromProductDto(request, product);
         List<String> imageUrls = new ArrayList<>();
-        for (MultipartFile imageFile : imageFiles) {
+        for (String imageUrl : product.getImageUrl()) {
+            if (imageUrl != null) {
+                String file = imageUrl.replace("https://ff82f4df-f72b-4dec-84ca-487132aff620.mock.pstmn.io/uploads/", "");
+                fileStorageService.deleteFile(file);
+            }
+
+        }
+        product.setImageUrl(imageUrls);
+         for (MultipartFile imageFile : imageFiles) {
             if (imageFile != null && !imageFile.isEmpty()) {
                 try {
-                    String imageUrl1 = fileStorageService.storeFile(imageFile);
+                    String fileName = fileStorageService.storeFile(imageFile);
+                    String imageUrl1 ="https://ff82f4df-f72b-4dec-84ca-487132aff620.mock.pstmn.io/uploads/" + fileName;
+                    product.setImageUrl(imageUrls);
                     imageUrls.add(imageUrl1);
-                    for (String imageUrl : product.getImageUrl()) {
-                        if (product.getImageUrl() != null) {
-                            fileStorageService.deleteFile(imageUrl);
-                        }
-                        product.setImageUrl(imageUrls);
-                    }
+
                 } catch (IOException e) {
                     throw new ApplicationException(Exceptions.IMAGE_STORAGE_EXCEPTION);
                 }
@@ -104,7 +109,8 @@ public class ProductServiceImpl implements ProductService {
         for (String imageUrl : product.getImageUrl()) {
             if (imageUrl != null) {
                 try {
-                    fileStorageService.deleteFile(imageUrl);
+                    String file = imageUrl.replace("https://ff82f4df-f72b-4dec-84ca-487132aff620.mock.pstmn.io/uploads/","");
+                    fileStorageService.deleteFile(file);
                 } catch (IOException e) {
                     log.error("Failed to delete image");
                 }

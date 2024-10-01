@@ -27,7 +27,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     @Override
     public String storeFile(MultipartFile file) throws IOException {
-        String fileName= UUID.randomUUID().toString()+"_"+file.getOriginalFilename();
+        String fileName=UUID.randomUUID().toString()+"_"+file.getOriginalFilename();
         Path destinationFile=this.rootLocation.resolve(fileName);
         try(var inputStream=file.getInputStream()){
             Files.copy(inputStream,destinationFile);

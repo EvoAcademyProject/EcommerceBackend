@@ -3,6 +3,8 @@ package com.backend.ecommercebackend.controller;
 import com.backend.ecommercebackend.dto.request.ProductRequest;
 import com.backend.ecommercebackend.dto.response.ProductResponse;
 import com.backend.ecommercebackend.service.ProductService;
+
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +51,7 @@ public class ProductController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id,@ModelAttribute ProductRequest request, @RequestParam(value="imageFile")List<MultipartFile> imageFiles) {
+  public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id,@ModelAttribute ProductRequest request, @RequestParam(value="imageFile")List<MultipartFile> imageFiles) throws IOException {
     final var updatedProduct = service.updateProduct(id, request, imageFiles);
     final var location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").build(updatedProduct.getId());
     return ResponseEntity.created(location).body(updatedProduct);
