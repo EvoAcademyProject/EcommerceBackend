@@ -33,6 +33,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setCreatedAt(LocalDateTime.now());
         comment.setUpdatedAt(LocalDateTime.now());
         comment.setCommentOwner(commentOwner);
+        comment.setProfileImg(user.getProfileImg());
         repository.save(comment);
         return mapper.CommentEntityToDto(comment);
     }

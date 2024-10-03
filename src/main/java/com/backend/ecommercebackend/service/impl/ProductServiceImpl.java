@@ -1,11 +1,14 @@
 package com.backend.ecommercebackend.service.impl;
 
+import com.backend.ecommercebackend.dto.request.CommentRequest;
 import com.backend.ecommercebackend.dto.request.ProductRequest;
 import com.backend.ecommercebackend.dto.response.ProductResponse;
 import com.backend.ecommercebackend.enums.Exceptions;
 import com.backend.ecommercebackend.exception.ApplicationException;
 import com.backend.ecommercebackend.mapper.ProductMapper;
+import com.backend.ecommercebackend.model.product.Comment;
 import com.backend.ecommercebackend.model.product.Product;
+import com.backend.ecommercebackend.repository.product.CommentRepository;
 import com.backend.ecommercebackend.repository.product.ProductRepository;
 import com.backend.ecommercebackend.service.FileStorageService;
 import com.backend.ecommercebackend.service.ProductService;
@@ -28,6 +31,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductMapper mapper;
     private final ProductRepository repository;
     private final FileStorageService fileStorageService;
+    private final CommentRepository commentRepository;
 
     @Override
     public ProductResponse addProduct(ProductRequest request, List<MultipartFile> imageFiles) {
@@ -43,19 +47,7 @@ public class ProductServiceImpl implements ProductService {
         }
         Product product = mapper.ProductDtoToEntity(request);
         List<String> imageUrls = new ArrayList<>();
-        for (MultipartFile imageFile : imageFiles) {
-            if (imageFile != null && !imageFile.isEmpty()) {
-                try {
-                    String fileName = fileStorageService.storeFile(imageFile);
-                    String imageUrl = "https://ff82f4df-f72b-4dec-84ca-487132aff620.mock.pstmn.io/uploads/" + fileName;
-                    imageUrls.add(imageUrl);
-                    product.setImageUrl(imageUrls);
-                } catch (IOException e) {
-                    throw new ApplicationException(Exceptions.IMAGE_STORAGE_EXCEPTION);
-                }
-            }
-        }
-
+        addImage(imageFiles,product,imageUrls);
         repository.save(product);
         return mapper.EntityToProductDto(product);
     }
@@ -67,34 +59,40 @@ public class ProductServiceImpl implements ProductService {
         List<String> imageUrls = new ArrayList<>();
         for (String imageUrl : product.getImageUrl()) {
             if (imageUrl != null) {
-                String file = imageUrl.replace("https://ff82f4df-f72b-4dec-84ca-487132aff620.mock.pstmn.io/uploads/", "");
-                fileStorageService.deleteFile(file);
+                fileStorageService.deleteFile(imageUrl);
             }
 
         }
         product.setImageUrl(imageUrls);
-         for (MultipartFile imageFile : imageFiles) {
+        addImage(imageFiles,product,imageUrls);
+        repository.save(product);
+        return mapper.EntityToProductDto(product);
+    }
+
+    public void addImage(List<MultipartFile> imageFiles, Product product, List<String> imageUrls) {
+        for (MultipartFile imageFile : imageFiles) {
             if (imageFile != null && !imageFile.isEmpty()) {
                 try {
-                    String fileName = fileStorageService.storeFile(imageFile);
-                    String imageUrl1 ="https://ff82f4df-f72b-4dec-84ca-487132aff620.mock.pstmn.io/uploads/" + fileName;
+                    String url = fileStorageService.storeImages(imageFile, "productImages");
+                    imageUrls.add(url);
                     product.setImageUrl(imageUrls);
-                    imageUrls.add(imageUrl1);
 
                 } catch (IOException e) {
                     throw new ApplicationException(Exceptions.IMAGE_STORAGE_EXCEPTION);
                 }
             }
         }
-        repository.save(product);
-        return mapper.EntityToProductDto(product);
     }
-
-
     @Override
     public ProductResponse getProductById(Long id) {
         Product product = repository.findById(id).orElseThrow(() -> new ApplicationException(Exceptions.NOT_FOUND_EXCEPTION));
         return mapper.EntityToProductDto(product);
+    }
+
+    @Override
+    public List<ProductResponse> getProductsByCategoryName(String categoryName) {
+        List<Product> products= repository.findByCategoryName(categoryName);
+        return mapper.EntityListToProductDtoList(products);
     }
 
     @Override
@@ -109,14 +107,13 @@ public class ProductServiceImpl implements ProductService {
         for (String imageUrl : product.getImageUrl()) {
             if (imageUrl != null) {
                 try {
-                    String file = imageUrl.replace("https://ff82f4df-f72b-4dec-84ca-487132aff620.mock.pstmn.io/uploads/","");
-                    fileStorageService.deleteFile(file);
+                    fileStorageService.deleteFile(imageUrl);
                 } catch (IOException e) {
                     log.error("Failed to delete image");
                 }
             }
         }
-
+        commentRepository.deleteByProductId(id);
         repository.deleteById(id);
     }
 

@@ -26,9 +26,6 @@ spring:
       ddl-auto: update
 
 
-
-
-
   mail:
     host: smtp.gmail.com
     port: 587
@@ -53,6 +50,12 @@ verification-code:
 
 activation-token:
   expiration: 864000000
+
+cloudinary:
+  cloud:
+    name: dxwnhu7af
+    api-key: 842273197433114
+    api-secret: Pk4pPw0keRWoNMLMeaNPnWJlFQQ
 
 server:
   port: 8081

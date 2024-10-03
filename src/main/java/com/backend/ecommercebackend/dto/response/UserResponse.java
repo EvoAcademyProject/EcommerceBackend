@@ -1,4 +1,4 @@
-package com.backend.ecommercebackend.dto;
+package com.backend.ecommercebackend.dto.response;
 
 
 import lombok.*;
@@ -11,12 +11,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UsersDto {
+public class UserResponse {
     Long id;
     String firstName;
     String lastName;
     String email;
     String password;
+    String profileImg;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 }

@@ -30,7 +30,7 @@ public class Product {
     String description;
 
     @Column(nullable = false)
-    int price;
+    double price;
 
     @Column(nullable = false)
     float ratingSum = 0.0f;

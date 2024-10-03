@@ -16,6 +16,7 @@ public class CommentResponse {
     Long commentId;
     String comment;
     String commentOwner;
+    String profileImg;
     float rating;
     Long productId;
     LocalDateTime createdAt;

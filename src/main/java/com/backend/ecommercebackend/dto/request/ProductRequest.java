@@ -18,7 +18,6 @@ public class ProductRequest {
     String name;
     String modelNumber;
     int price;
-    List<MultipartFile> imageFile;
     String description;
     String categoryName;
     List<Object> specifications;

@@ -5,7 +5,7 @@ import com.backend.ecommercebackend.authentication.dto.request.RegisterRequest;
 import com.backend.ecommercebackend.authentication.jwt.JwtService;
 import com.backend.ecommercebackend.authentication.dto.request.AuthRequest;
 import com.backend.ecommercebackend.authentication.mapper.AuthMapper;
-import com.backend.ecommercebackend.authentication.model.AuthResponse;
+import com.backend.ecommercebackend.authentication.dto.response.AuthResponse;
 import com.backend.ecommercebackend.authentication.service.AuthenticationService;
 import com.backend.ecommercebackend.cache.service.RedisTokenService;
 import com.backend.ecommercebackend.enums.Exceptions;
@@ -13,17 +13,16 @@ import com.backend.ecommercebackend.exception.ApplicationException;
 import com.backend.ecommercebackend.model.user.Role;
 import com.backend.ecommercebackend.model.user.User;
 import com.backend.ecommercebackend.repository.user.UserRepository;
+import com.backend.ecommercebackend.service.FileStorageService;
 import com.backend.ecommercebackend.service.impl.EmailServiceImpl;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -32,7 +31,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
-
+    private final FileStorageService fileStorageService;
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -43,7 +42,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final EmailServiceImpl emailService;
 
     @Override
-    public AuthResponse register(RegisterRequest request) {
+    public AuthResponse register(RegisterRequest request, MultipartFile file) {
 
         if(!request.getConfirmPassword().equals(request.getPassword())){
             throw new ApplicationException(Exceptions.PASSWORD_MISMATCH_EXCEPTION);
@@ -62,7 +61,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setRole(Role.USER);
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
-
+        try {
+            String url = fileStorageService.storeImages(file,"profileImages");
+            user.setProfileImg(url);
+        }catch (IOException e){
+            throw new ApplicationException(Exceptions.IMAGE_STORAGE_EXCEPTION);
+        }
         repository.save(user);
 
         emailService.deleteStoredEmail(request.getEmail());

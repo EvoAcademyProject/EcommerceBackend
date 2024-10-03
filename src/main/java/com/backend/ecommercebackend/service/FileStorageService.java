@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public interface FileStorageService {
-    String storeFile(MultipartFile file) throws IOException;
-    Path loadFile(String fileName);
-    void deleteFile(String fileName) throws IOException;
+    String storeImages(MultipartFile file,String folderName) throws IOException;
+    void deleteFile(String Url) throws IOException;
 }

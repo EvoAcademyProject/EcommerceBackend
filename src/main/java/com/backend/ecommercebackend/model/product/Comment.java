@@ -29,6 +29,8 @@ public class Comment {
 
     @Column(nullable = false)
     String commentOwner;
+    @Column(nullable = false)
+    String profileImg;
 
     float rating;
 

@@ -32,7 +32,10 @@ public class ProductController {
   public ResponseEntity<List<ProductResponse>> getAllProducts(){
     return ResponseEntity.ok(service.getAllProduct());
   }
-
+  @GetMapping
+  public ResponseEntity<List<ProductResponse>>getProductsByCategory(@RequestParam String categoryName){
+    return ResponseEntity.ok(service.getProductsByCategoryName(categoryName));
+  }
   @PostMapping("/{id}/rate")
   public ResponseEntity<ProductResponse> rateProduct(@PathVariable Long id, @RequestParam float rating) {
     return ResponseEntity.ok(service.rateProduct(id, rating));
