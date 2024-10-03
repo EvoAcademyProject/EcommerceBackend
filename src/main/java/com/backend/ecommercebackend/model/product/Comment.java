@@ -1,7 +1,11 @@
-package com.backend.ecommercebackend.model.user;
+package com.backend.ecommercebackend.model.product;
 
 import jakarta.persistence.*;
-import lombok.*;
+import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -9,30 +13,29 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "users")
+@Table
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    @Column(nullable = false)
-    String firstName;
-    @Column(nullable = false)
-    String lastName;
-    @Column(nullable = false, unique = true)
-    String email;
-    @Column(nullable = false)
-    String password;
+    Long commentId;
+
+    @Size(max = 500)
+    String comment;
 
     @Column(nullable = false)
+    String commentOwner;
+    @Column(nullable = false)
     String profileImg;
-    @Enumerated(EnumType.STRING)
-    private Role role;
+
+    float rating;
+
+    @Column(nullable = false)
+    Long productId;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

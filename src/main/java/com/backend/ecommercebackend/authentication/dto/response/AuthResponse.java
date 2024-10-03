@@ -1,4 +1,4 @@
-package com.backend.ecommercebackend.authentication.model;
+package com.backend.ecommercebackend.authentication.dto.response;
 
 import lombok.Builder;
 import lombok.Data;

@@ -6,6 +6,7 @@ import com.backend.ecommercebackend.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 
@@ -27,15 +28,20 @@ public class CategoryController {
 
     @PostMapping("/createCategory")
     public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest categoryRequest) {
-        return ResponseEntity.ok(service.createCategory(categoryRequest));
+        final var createdCategory = service.createCategory(categoryRequest);
+        final var location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{categoryId}").build(createdCategory.getCategoryId());
+        return ResponseEntity.created(location).body(createdCategory);
     }
-    @PutMapping("/categoryUpdate/{categoryId}")
+    @PutMapping("/updateCategory/{categoryId}")
     public ResponseEntity<CategoryResponse> updateCategory(@PathVariable int categoryId, @RequestBody CategoryRequest categoryRequest) {
-        return  ResponseEntity.ok(service.updateCategory(categoryId, categoryRequest));
+        final var updatedCategory = service.updateCategory(categoryId, categoryRequest);
+        final var location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{categoryId}").build(updatedCategory.getCategoryId());
+        return  ResponseEntity.created(location).body(updatedCategory);
     }
 
-    @DeleteMapping("/categoryDelete/{categoryId}")
-    public void deleteCategory(@PathVariable int categoryId) {
-        service.deleteCategory(categoryId);
+    @DeleteMapping("/deleteCategory/{categoryId}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable int categoryId) {
+         service.deleteCategory(categoryId);
+         return ResponseEntity.noContent().build();
     }
 }

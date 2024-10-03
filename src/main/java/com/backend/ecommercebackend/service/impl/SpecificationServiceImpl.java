@@ -3,6 +3,8 @@ package com.backend.ecommercebackend.service.impl;
 import com.backend.ecommercebackend.dto.ProductSpecificationDto;
 import com.backend.ecommercebackend.dto.request.ProductSpecificationRequest;
 import com.backend.ecommercebackend.dto.response.ProductSpecificationResponse;
+import com.backend.ecommercebackend.enums.Exceptions;
+import com.backend.ecommercebackend.exception.ApplicationException;
 import com.backend.ecommercebackend.mapper.SpecificationMapper;
 import com.backend.ecommercebackend.model.product.Category;
 import com.backend.ecommercebackend.model.product.ProductSpecification;
@@ -31,7 +33,7 @@ public class SpecificationServiceImpl implements SpecificationService {
     public ProductSpecificationResponse addSpecification(ProductSpecificationRequest specificationRequest) {
         ProductSpecification specification = mapper.SpecificationDtoToEntity(specificationRequest);
         repository.save(specification);
-        Category category = categoryRepository.findById(specificationRequest.getCategoryId()).orElseThrow(() -> new RuntimeException("Category not found"));
+        Category category = categoryRepository.findById(specificationRequest.getCategoryId()).orElseThrow(() -> new ApplicationException(Exceptions.NOT_FOUND_EXCEPTION));
         ProductSpecificationDto specificationDto = new ProductSpecificationDto();
         specificationDto.setSpecificationId(specification.getSpecificationId());
         specificationDto.setSpecificationName(specification.getSpecificationName());
@@ -47,9 +49,9 @@ public class SpecificationServiceImpl implements SpecificationService {
 
     @Override
     public ProductSpecificationResponse updateSpecification(Long specificationId, ProductSpecificationRequest specificationRequest) {
-        ProductSpecification specification = repository.findById(specificationId).orElseThrow(() -> new RuntimeException("Specification not found"));
+        ProductSpecification specification = repository.findById(specificationId).orElseThrow(() -> new ApplicationException(Exceptions.NOT_FOUND_EXCEPTION));
         ProductSpecification save = mapper.updateSpecificationFromDto(specificationRequest, specification);
-        Category category = categoryRepository.findById(specificationRequest.getCategoryId()).orElseThrow(() -> new RuntimeException("Category not found"));
+        Category category = categoryRepository.findById(specificationRequest.getCategoryId()).orElseThrow(() -> new ApplicationException(Exceptions.NOT_FOUND_EXCEPTION));
         List<ProductSpecificationDto>specifications = category.getSpecifications();
         if(specifications==null){
             specifications = new ArrayList<>();
@@ -66,7 +68,7 @@ public class SpecificationServiceImpl implements SpecificationService {
 
     @Override
     public void deleteSpecification(Long id, int categoryId) {
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Category not found"));
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ApplicationException(Exceptions.NOT_FOUND_EXCEPTION));
         category.getSpecifications().removeIf(p -> p.getSpecificationId().equals(id));
         categoryRepository.save(category);
         repository.deleteById(id);

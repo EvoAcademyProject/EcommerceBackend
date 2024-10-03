@@ -3,6 +3,8 @@ package com.backend.ecommercebackend.service.impl;
 import com.backend.ecommercebackend.dto.ProductSpecificationDto;
 import com.backend.ecommercebackend.dto.request.CategoryRequest;
 import com.backend.ecommercebackend.dto.response.CategoryResponse;
+import com.backend.ecommercebackend.enums.Exceptions;
+import com.backend.ecommercebackend.exception.ApplicationException;
 import com.backend.ecommercebackend.mapper.CategoryMapper;
 import com.backend.ecommercebackend.model.product.Category;
 import com.backend.ecommercebackend.repository.product.CategoryRepository;
@@ -39,7 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponse updateCategory(int categoryId, CategoryRequest categoryRequest) {
-        Category category = repository.findById(categoryId).orElseThrow(()-> new RuntimeException("category not found"));
+        Category category = repository.findById(categoryId).orElseThrow(()-> new ApplicationException(Exceptions.NOT_FOUND_EXCEPTION));
         List<ProductSpecificationDto>specifications=category.getSpecifications();
         Category save = categoryMapper.updateCategoryFromDto(categoryRequest,category);
         save.setSpecifications(specifications);

@@ -27,17 +27,23 @@ public class Product {
     String modelNumber;
 
     @Column(nullable = false)
-    @Lob
     String description;
 
     @Column(nullable = false)
-    int price;
+    double price;
 
     @Column(nullable = false)
-    float rating;
+    float ratingSum = 0.0f;
 
     @Column(nullable = false)
-    String imageUrl;
+    int totalRatings = 0;
+
+    @Column(nullable = false)
+    float rating = 0.0f;
+
+    @Column(columnDefinition = "jsonb", nullable = false)
+    @JdbcTypeCode(SqlTypes.JSON)
+    List<String> imageUrl;
 
     @JoinColumn(nullable = false)
     String categoryName;

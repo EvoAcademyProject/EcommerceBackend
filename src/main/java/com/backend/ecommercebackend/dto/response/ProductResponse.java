@@ -17,7 +17,9 @@ public class ProductResponse {
     String description;
     int price;
     float rating;
-    String imageUrl;
+    int ratingSum;
+    int totalRatings;
+    List<String>imageUrl;
     String categoryName;
     List<Object> specifications;
 }
