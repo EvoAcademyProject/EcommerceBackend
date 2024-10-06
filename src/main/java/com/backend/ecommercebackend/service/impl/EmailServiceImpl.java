@@ -17,6 +17,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
@@ -96,12 +97,20 @@ public class EmailServiceImpl implements EmailService {
     userEmail.setVerified(true);
 
     emailRepository.save(userEmail);
-    redisActivationTokenService.deleteActivationToken(request.getEmail());
   }
 
   @Override
   public void deleteStoredEmail(String email) {
     emailRepository.deleteByEmail(email);
+  }
+
+  @Override
+  public void checkIfEmailIsVerified(String email) {
+    Optional<UserEmail> userEmail = emailRepository.findByEmail(email);
+
+    if (!userEmail.get().isVerified()) {
+      throw new ApplicationException(Exceptions.EMAIL_NOT_VERIFIED_EXCEPTION);
+    }
   }
 
   private String createVerificationCode() {
@@ -115,7 +124,7 @@ public class EmailServiceImpl implements EmailService {
   }
 
   private String generateActivationLink(String activationToken) {
-    return "https://ff82f4df-f72b-4dec-84ca-487132aff620.mock.pstmn.io/api/v1/auth/activate?token=" + activationToken;
+    return "http://localhost:8081/api/v1/auth/activate?token=" + activationToken;
 
   }
 }
