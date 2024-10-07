@@ -3,9 +3,11 @@ package com.backend.ecommercebackend.mapper;
 import com.backend.ecommercebackend.dto.request.ProductRequest;
 import com.backend.ecommercebackend.dto.response.ProductResponse;
 import com.backend.ecommercebackend.model.product.Product;
+
+import java.util.ArrayList;
 import java.util.List;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
+
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
