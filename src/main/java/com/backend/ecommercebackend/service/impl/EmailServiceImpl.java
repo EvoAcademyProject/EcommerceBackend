@@ -13,11 +13,11 @@ import com.backend.ecommercebackend.service.EmailService;
 import com.backend.ecommercebackend.cache.service.RedisVerificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
@@ -69,7 +69,6 @@ public class EmailServiceImpl implements EmailService {
 
   @Override
   public void registerEmail(EmailRequest request) {
-    try {
       if (userRepository.findByEmail(request.getEmail()).isPresent()
               || emailRepository.findByEmail(request.getEmail()).isPresent()) {
         throw new ApplicationException(Exceptions.USER_ALREADY_EXIST);
@@ -82,10 +81,6 @@ public class EmailServiceImpl implements EmailService {
       sendActivationLink(userEmail.getEmail());
 
       emailRepository.save(userEmail);
-
-    } catch (DataIntegrityViolationException e) {
-      throw new ApplicationException(Exceptions.USER_ALREADY_EXIST);
-    }
   }
 
   @Override
@@ -102,12 +97,20 @@ public class EmailServiceImpl implements EmailService {
     userEmail.setVerified(true);
 
     emailRepository.save(userEmail);
-    redisActivationTokenService.deleteActivationToken(request.getEmail());
   }
 
   @Override
   public void deleteStoredEmail(String email) {
     emailRepository.deleteByEmail(email);
+  }
+
+  @Override
+  public void checkIfEmailIsVerified(String email) {
+    Optional<UserEmail> userEmail = emailRepository.findByEmail(email);
+
+    if (!userEmail.get().isVerified()) {
+      throw new ApplicationException(Exceptions.EMAIL_NOT_VERIFIED_EXCEPTION);
+    }
   }
 
   private String createVerificationCode() {

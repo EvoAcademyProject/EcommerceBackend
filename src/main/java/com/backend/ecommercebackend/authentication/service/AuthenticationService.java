@@ -15,5 +15,5 @@ public interface AuthenticationService {
      AuthResponse register(RegisterRequest request);
      AuthResponse authenticate(AuthRequest request);
      void logout(LogoutRequest request);
-     void refreshAuthToken(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
+     AuthResponse refreshAuthToken(HttpServletRequest request) throws ServletException, IOException;
 }

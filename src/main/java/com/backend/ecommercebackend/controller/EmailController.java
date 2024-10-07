@@ -26,9 +26,11 @@ public class EmailController {
         emailService.registerEmail(request);
         return ResponseEntity.ok("User email stored successfully with unverified");
     }
+
     @PostMapping("/activate")
     public ResponseEntity<String> activateUser(@Valid @RequestBody EmailActivationRequest request) {
         emailService.activateEmail(request);
+        emailService.checkIfEmailIsVerified(request.getEmail());
         return ResponseEntity.ok("User email activated successfully");
     }
 }

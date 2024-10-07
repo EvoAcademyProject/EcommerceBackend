@@ -9,4 +9,5 @@ public interface EmailService {
     void registerEmail(EmailRequest request);
     void activateEmail(EmailActivationRequest request);
     void deleteStoredEmail(String email);
+    void checkIfEmailIsVerified(String email);
 }

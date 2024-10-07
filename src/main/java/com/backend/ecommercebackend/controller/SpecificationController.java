@@ -5,6 +5,8 @@ import com.backend.ecommercebackend.service.SpecificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import java.util.List;
 
 @RestController
@@ -20,16 +22,21 @@ public class SpecificationController {
 
     @PostMapping("/createSpec")
     public ResponseEntity<ProductSpecificationResponse> createSpecification(@RequestBody ProductSpecificationRequest specificationRequest) {
-        return ResponseEntity.ok(service.addSpecification(specificationRequest));
+        final var createdSpecification = service.addSpecification(specificationRequest);
+        final var location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/specification/{specificationId}").build(createdSpecification.getSpecificationId());
+        return ResponseEntity.created(location).body(createdSpecification);
     }
 
     @PutMapping("/specUpdate/{specificationId}")
-    public ResponseEntity<ProductSpecificationResponse> updateCategory(@PathVariable Long specificationId, @RequestBody ProductSpecificationRequest specificationRequest) {
-        return  ResponseEntity.ok(service.updateSpecification(specificationId, specificationRequest));
+    public ResponseEntity<ProductSpecificationResponse> updateSpecification(@PathVariable Long specificationId, @RequestBody ProductSpecificationRequest specificationRequest) {
+        final var updatedSpecification = service.updateSpecification(specificationId, specificationRequest);
+        final var location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/specification/{specificationId}").build(updatedSpecification.getSpecificationId());
+        return  ResponseEntity.created(location).body(updatedSpecification);
     }
 
-    @DeleteMapping("/specDelete/{categoryId}/{specificationId}")
-    public void deleteCategory(@PathVariable Long specificationId,@PathVariable int categoryId) {
+    @DeleteMapping("/deleteSpec/{categoryId}/{specificationId}")
+    public ResponseEntity<Void> deleteSpecification(@PathVariable Long specificationId,@PathVariable int categoryId) {
         service.deleteSpecification(specificationId,categoryId);
+        return ResponseEntity.noContent().build();
     }
 }

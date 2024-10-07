@@ -11,6 +11,6 @@ public interface UsersService {
     UsersDto get(Long id);
     UsersDto save(UsersRequest request);
     UsersDto update(Long id ,UsersRequest request);
-    void delete(Long id);
+    void delete(String email);
 
 }

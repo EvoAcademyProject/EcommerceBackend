@@ -2,13 +2,17 @@ package com.backend.ecommercebackend.service.impl;
 
 import com.backend.ecommercebackend.dto.UsersDto;
 import com.backend.ecommercebackend.dto.request.UsersRequest;
+import com.backend.ecommercebackend.enums.Exceptions;
+import com.backend.ecommercebackend.exception.ApplicationException;
 import com.backend.ecommercebackend.mapper.UsersMapper;
+import com.backend.ecommercebackend.model.user.User;
 import com.backend.ecommercebackend.repository.user.UserRepository;
 import com.backend.ecommercebackend.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +42,13 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(String email) {
+        Optional<User> user = repository.findByEmail(email);
 
+        if (user.isEmpty()) {
+            throw new ApplicationException(Exceptions.USER_NOT_FOUND);
+        }
+
+        repository.delete(user.get());
     }
 }
